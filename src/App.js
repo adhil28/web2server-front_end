@@ -3,59 +3,17 @@ import axios from 'axios'
 import { Button, CircularProgress, TextField } from '@mui/material';
 import { useState } from 'react';
 import logo from './logo.png';
+import LinearProgressWithLabel from './Components/LinearProgressWithLabel';
 
-import PropTypes from 'prop-types';
-import LinearProgress from '@mui/material/LinearProgress';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
+
 function App() {
   const [showLoading, setShowloading] = useState(false)
   const [loadingText, setloadingText] = useState('Building')
   const [percent, setpercent] = useState('0')
   const [downloading, setdownloading] = useState(false)
   let name, site, logo_link;
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAf03E1R4ScJueYzYDq1NY0v6c6E8ppu1g",
-    authDomain: "web2linux.firebaseapp.com",
-    projectId: "web2linux",
-    storageBucket: "web2linux.appspot.com",
-    messagingSenderId: "351952684565",
-    appId: "1:351952684565:web:e87fd85d94ad3cc5ccf01c",
-    measurementId: "G-HP9F4JQTP5"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-
-  function LinearProgressWithLabel(props) {
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Box sx={{ width: '100%', mr: 1 }}>
-          <LinearProgress variant="determinate" {...props} />
-        </Box>
-        <Box sx={{ minWidth: 35 }}>
-          <Typography variant="body2" color="text.secondary">{`${Math.round(
-            props.value,
-          )}%`}</Typography>
-        </Box>
-      </Box>
-    );
-  }
-
-  LinearProgressWithLabel.propTypes = {
-    /**
-     * The value of the progress indicator for the determinate and buffer variants.
-     * Value between 0 and 100.
-     */
-    value: PropTypes.number.isRequired,
-  };
-
 
   return (
     <center style={{ margin: '50px' }} >
@@ -71,10 +29,10 @@ function App() {
           <TextField onChange={(e) => {
             name = e.target.value
           }} label="Name of your app" fullWidth />
-          <TextField  onChange={(e) => {
+          <TextField onChange={(e) => {
             site = e.target.value
           }} style={{ marginTop: '10px' }} label="Website link" fullWidth />
-         
+
           <Button onClick={() => {
             if (name != null && site != null) {
               setShowloading(true)
@@ -82,11 +40,6 @@ function App() {
                 responseType: 'blob', onDownloadProgress: (progressEvent) => {
                   setloadingText('Downloading')
                   setdownloading(true)
-                  let downloadCount = {
-                    timeStamp: progressEvent.timeStamp,
-                    total: progressEvent.total,
-                    loaded: progressEvent.loaded
-                  }
                   let percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
                   );
